@@ -1,0 +1,110 @@
+package CodeMyBank;
+
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+
+        int opcao = 0;
+
+        //criar conta
+        Conta conta = new Conta("Luiz Felipe", "00000-1", "0001");
+        Conta contaDestino = new Conta("Caio", "00000-2", "0002");
+        Banco banco = new Banco();
+
+        banco.adicionarConta(conta);
+        banco.adicionarConta(contaDestino);
+
+        Scanner sc = new Scanner(System.in);
+        Metodo metodo = new Metodo();
+
+    while (opcao != 6){
+        System.out.println("1 - Adicionar receita:");
+        System.out.println("2 - Adicionar despesas:");
+        System.out.println("3 - Fazer Transferência:");
+        System.out.println("4 - Ver Saldo");
+        System.out.println("5 - Ver histórico");
+        System.out.println("6 - Sair");
+
+        System.out.println("--------------------");
+        System.out.println("Digite uma opção");
+        opcao = sc.nextInt();
+
+        switch (opcao){
+            case 1:
+                System.out.println("Digite o valor da receita: ");
+                double valor = metodo.lerValorValido(sc);
+                conta.depositar(valor);
+                break;
+
+            case 2:
+                System.out.println("Digite o valor das despesas: ");
+                valor = metodo.lerValorValido(sc);
+                boolean conseguiuSacar = conta.sacar(valor);
+
+                if(conseguiuSacar){
+                    System.out.println("Saque Aprovado");
+                }else{
+                    System.out.println("Saldo insuficiente");
+                }
+                break;
+
+            case 3:
+                System.out.println("Digite o número da conta destinatária");
+                String numeroConta = sc.next();
+
+                Conta destino = banco.buscarConta(numeroConta);
+
+                if(destino == null){
+                    System.out.println("Conta não encontrada");
+                    break;
+                }
+
+                System.out.println("Digite o valor que deseja Transferir:");
+                valor = metodo.lerValorValido(sc);
+                boolean conseguiuTransferir = conta.transferir(destino, valor);
+
+                if(conseguiuTransferir){
+                    System.out.println("Transferência realizada!");
+                }else{
+                    System.out.println("Não foi possivel realizar a Transferência");
+                }
+                break;
+
+            case 4:
+                System.out.println( "Saldo atual: R$ "+conta.getSaldo());
+                break;
+
+            case 5:
+                if(conta.getHistorico().isEmpty() ){
+                    System.out.println("Histórico sem transações");
+                }else {
+                    for (Transacao transacao : conta.getHistorico()) {
+                        System.out.println("Descrição " + transacao.getDescricao());
+                        System.out.println("Tipo " + transacao.getTipo());
+                        System.out.println("Valor " + transacao.getValor());
+                        System.out.println("Data " + transacao.getData());
+                        System.out.println("-----------------");
+
+                    }
+                    for (Transacao transacao : contaDestino.getHistorico()) {
+                        System.out.println("Descrição " + transacao.getDescricao());
+                        System.out.println("Tipo " + transacao.getTipo());
+                        System.out.println("Valor " + transacao.getValor());
+                        System.out.println("Data " + transacao.getData());
+                        System.out.println("-----------------");
+                    }
+                }
+                break;
+
+            case 6:
+                break;
+
+            default:
+                System.out.println("Opção inválida");
+                break;
+            }
+        }
+
+
+    }
+    }
