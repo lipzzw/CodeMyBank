@@ -1,0 +1,33 @@
+package CodeMyBank;
+
+import java.time.LocalDate;
+
+public class Transacao {
+    private String descricao;
+    private String tipo; // Futuramente aprenderei enum, entao o tipo String sera trocado por enum.
+    private double valor;
+    private LocalDate data;
+
+    public Transacao(String descricao, String tipo,double valor){
+        this.descricao = descricao;
+        this.tipo = tipo;
+        this.valor = valor;
+        this.data = LocalDate.now();
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public double getValor() {
+        return valor;
+    }
+
+    public LocalDate getData() {
+        return data;
+    }
+}
