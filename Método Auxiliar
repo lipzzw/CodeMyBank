@@ -1,0 +1,23 @@
+package CodeMyBank;
+
+import java.util.Scanner;
+public class Metodo {
+
+    public double lerValorValido(Scanner sc){
+        double valor = 0;
+
+        do {
+            valor = sc.nextDouble();
+
+            if(valor <= 0){
+            System.out.println("Valor inválido");
+            System.out.println("Digite novamente");
+
+            }
+
+        }while(valor <= 0);
+
+        return valor;
+    }
+
+}
