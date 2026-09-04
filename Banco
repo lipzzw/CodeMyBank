@@ -1,0 +1,26 @@
+package CodeMyBank;
+
+import java.util.ArrayList;
+
+public class Banco {
+    private ArrayList<Conta> contas;
+
+    //Construtor inicializando a lista de contas
+    public Banco(){
+        this.contas = new ArrayList<>();
+    }
+
+    //Metodo para adicionar contas a lista.
+    public void adicionarConta(Conta conta){
+        contas.add(conta);
+    }
+
+    public Conta buscarConta(String numeroConta){
+        for(Conta conta : contas){
+            if(numeroConta.equals(conta.getNumeroConta())){
+                return conta;
+            }
+        }
+        return null;
+    }
+}
