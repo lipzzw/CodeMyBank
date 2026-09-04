@@ -1,0 +1,106 @@
+package CodeMyBank;
+
+
+import java.util.ArrayList;
+
+public class Conta {
+    private String titular;
+    private String numeroConta;
+    private double saldo;
+    private String agencia;
+    private ArrayList<Transacao> historico; //Arraylist é apenas o recipiente das transações
+
+    public Conta(String titular, String numeroConta, String agencia) {
+        this.titular = titular;
+        this.numeroConta = numeroConta;
+        this.agencia = agencia;
+        this.saldo = 0;
+        this.historico = new ArrayList<>(); //Colocando os moveis do quarto.
+    }
+
+    //REGRA DE NEGOCIO PARA DEPOSITOS E ADICIONANDO ELAS AO HISTORICO DE TRANSACOES
+    public void depositar(double valor) {
+        if (!validarRegras(valor)){
+            return;
+        }
+        saldo += valor;
+
+       adicionarTransacao(new Transacao("Depósito", "Depósito", valor));
+    }
+
+    // REGRA DE NEGOCIOS PARA SAQUES E ADICIONANDO ELAS NO HISTORICO DE TRANSCACOES
+    public boolean sacar(double valor) {
+        if(!retirarSaldo(valor)) {
+            return false;
+        }
+            adicionarTransacao(new Transacao("Saque realizado", "Saque", valor));
+            return true;
+
+
+    }
+    // METODO AUXILIAR PRIVADO: PARA VALIDAR AS REGRAS DE NEGOCIO E CENTRALIZALAS EM UM METODO
+    private boolean validarRegras(double valor) {
+        if (valor <= 0) {
+            return false;
+        }
+        return true;
+    }
+
+    // MOATRAR SALDO NA MAIN
+    public double getSaldo(){
+        return saldo;
+    }
+
+    //MOSTRAR COPIA(FICAR + SEGURO) DO HISTORICO
+    public ArrayList<Transacao> getHistorico(){
+        return new ArrayList<>(historico);
+        }
+
+        // METODO DA TRANSFERENCIA USANDO METODOS AUXILIARES, REGRAS DE NEGOCIO, E OBJ PARA ADICIONAR AS TRANSCACOES NO HISTORICO
+        public boolean transferir(Conta contaDestino, double valor){
+        if(contaDestino == this)
+            return false;
+
+        if(!retirarSaldo(valor))
+            return false;
+
+        contaDestino.adicionarSaldo(valor);
+
+        Transacao transacaoEnviada = new Transacao("Transferência Enviada", "Transferência", valor);
+        Transacao transacaoRecebida = new Transacao("Transferência Recebida", "Transferência", valor);
+
+        this.adicionarTransacao(transacaoEnviada);
+        contaDestino.adicionarTransacao(transacaoRecebida);
+
+        return true;
+        }
+
+        //METODO AUXILAR PRIVADO: PARA REGRAS DE NEGOCIO DO TRASNFERIR (VALOR É MENOR OU IGUAL A ZERO, SALDO É INSUFICINETE, RETIRE VALOR.
+        private boolean retirarSaldo(double valor){
+        if(!validarRegras(valor))
+            return false;
+        if(valor > saldo) {
+            return false;
+        }else{
+            saldo -= valor;
+            return true;
+        }
+    }
+
+    //METODO AUXILAR PRIVADO: PARA REGRAS DE NEGOCIO DO TRASNFERIR (VALOR É MENOR OU IGUAL A ZERO, ADICIONE VALOR.
+    private void adicionarSaldo(double valor){
+        if(!validarRegras(valor))
+            return;
+
+        saldo += valor;
+    }
+
+    // METODO AUXILIAR PRIVADO: PARA ADICIONAR A AÇAO AO HISTORIOC DE TRANSFERENCIA.
+    private void adicionarTransacao(Transacao transacao){
+        historico.add(transacao);
+    }
+
+    public String getNumeroConta(){
+        return numeroConta;
+    }
+}
